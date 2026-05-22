@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { submitOrder } from '@/api/checkout'
+import { submitOrder } from '@/shared/api/checkout'
 
 describe('submitOrder', () => {
   it('returns checkout page data for non-empty carts', async () => {

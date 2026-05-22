@@ -1,5 +1,6 @@
 import { ArrowLeft, Loader2, ShieldCheck } from 'lucide-react'
 import { Link, Navigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { CheckoutStepper } from '@/components/checkout/CheckoutStepper'
 import { OrderSummaryPanel } from '@/components/checkout/OrderSummaryPanel'
 import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector'
@@ -12,15 +13,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import {
+  selectCheckoutData,
+  selectPaymentMethod,
+  selectSelectedPaymentMethodId,
+} from '@/features/checkout'
 import { cn } from '@/lib/utils'
-import { useCartStore } from '@/store/cartStore'
 
 export function CheckoutPage() {
-  const checkoutData = useCartStore((state) => state.checkoutData)
-  const selectedPaymentMethodId = useCartStore(
-    (state) => state.selectedPaymentMethodId,
-  )
-  const selectPaymentMethod = useCartStore((state) => state.selectPaymentMethod)
+  const dispatch = useAppDispatch()
+  const checkoutData = useAppSelector(selectCheckoutData)
+  const selectedPaymentMethodId = useAppSelector(selectSelectedPaymentMethodId)
 
   if (!checkoutData) {
     return <Navigate to="/products" replace />
@@ -59,7 +62,7 @@ export function CheckoutPage() {
               <PaymentMethodSelector
                 methods={checkoutData.paymentMethods}
                 selectedMethodId={selectedPaymentMethodId}
-                onSelect={selectPaymentMethod}
+                onSelect={(methodId) => dispatch(selectPaymentMethod(methodId))}
               />
             </CardContent>
           </Card>

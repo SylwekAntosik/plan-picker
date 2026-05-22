@@ -1,47 +1,60 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { CartSummary } from '@/components/CartSummary/CartSummary'
 import { CheckoutStepper } from '@/components/checkout/CheckoutStepper'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { ProductList } from '@/components/ProductList/ProductList'
-import { useCartSummary, useHasSelectedPlans } from '@/hooks/useCartSummary'
 import {
-  useCartStore,
-} from '@/store/cartStore'
+  decrementQuantity,
+  incrementQuantity,
+  selectCartTotal,
+  selectHasSelectedPlans,
+  selectProducts,
+  selectProductsError,
+  selectProductsLoading,
+  selectSummaryItems,
+  syncProducts,
+} from '@/features/cart'
+import { useGetProductsQuery } from '@/features/catalog'
+import { useSubmitOrderMutation } from '@/features/checkout'
+import { getErrorMessage } from '@/shared/lib/getErrorMessage'
 
 export function ProductsPage() {
   const navigate = useNavigate()
-  const products = useCartStore((state) => state.products)
-  const quantities = useCartStore((state) => state.quantities)
-  const productsStatus = useCartStore((state) => state.productsStatus)
-  const productsError = useCartStore((state) => state.productsError)
-  const submitStatus = useCartStore((state) => state.submitStatus)
-  const submitError = useCartStore((state) => state.submitError)
-  const loadProducts = useCartStore((state) => state.loadProducts)
-  const increment = useCartStore((state) => state.increment)
-  const decrement = useCartStore((state) => state.decrement)
-  const submitOrder = useCartStore((state) => state.submitOrder)
-  const hasSelectedPlans = useHasSelectedPlans()
-  const { summaryItems, total } = useCartSummary()
+  const dispatch = useAppDispatch()
+  const { isError } = useGetProductsQuery()
+
+  const products = useAppSelector(selectProducts)
+  const quantities = useAppSelector((state) => state.cart.quantities)
+  const isLoading = useAppSelector(selectProductsLoading)
+  const productsError = useAppSelector(selectProductsError)
+  const summaryItems = useAppSelector(selectSummaryItems)
+  const total = useAppSelector(selectCartTotal)
+  const hasSelectedPlans = useAppSelector(selectHasSelectedPlans)
+
+  const [submitOrder, { isLoading: isCheckoutLoading, error: submitError }] =
+    useSubmitOrderMutation()
 
   useEffect(() => {
-    if (productsStatus === 'idle') {
-      void loadProducts()
+    if (products.length > 0) {
+      dispatch(syncProducts(products))
     }
-  }, [loadProducts, productsStatus])
-
-  const isLoading =
-    productsStatus === 'loading' || productsStatus === 'idle'
-  const isCheckoutLoading = submitStatus === 'loading'
+  }, [dispatch, products])
 
   const handleCheckout = async () => {
     try {
-      const checkoutData = await submitOrder()
+      const checkoutData = await submitOrder(summaryItems).unwrap()
       navigate(checkoutData.session.redirectPath)
     } catch {
-      // Error state is stored in the cart store.
+      // Mutation error is exposed via submitError.
     }
   }
+
+  const checkoutErrorMessage = getErrorMessage(
+    submitError,
+    'Checkout failed. Try again.',
+  )
 
   return (
     <PageLayout
@@ -53,10 +66,10 @@ export function ProductsPage() {
           products={products}
           quantities={quantities}
           isLoading={isLoading}
-          isError={productsStatus === 'error'}
+          isError={isError}
           error={productsError}
-          onIncrement={increment}
-          onDecrement={decrement}
+          onIncrement={(productId) => dispatch(incrementQuantity(productId))}
+          onDecrement={(productId) => dispatch(decrementQuantity(productId))}
         />
       }
       summary={
@@ -67,7 +80,7 @@ export function ProductsPage() {
           onCheckout={handleCheckout}
           isCheckoutDisabled={!hasSelectedPlans}
           isCheckoutLoading={isCheckoutLoading}
-          checkoutError={submitError}
+          checkoutError={checkoutErrorMessage}
         />
       }
     />

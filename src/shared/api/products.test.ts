@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fetchProducts, MOCK_PRODUCTS } from '@/api/products'
+import { fetchProducts, MOCK_PRODUCTS } from '@/shared/api/products'
 
 describe('fetchProducts', () => {
   it('returns mocked products', async () => {

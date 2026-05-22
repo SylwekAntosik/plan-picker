@@ -1,40 +1,20 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import * as checkoutApi from '@/api/checkout'
-import * as productsApi from '@/api/products'
-import { MOCK_PRODUCTS } from '@/api/products'
-import { AppRouter } from '@/routes/AppRouter'
-import { useCartStore } from '@/store/cartStore'
-
-function resetStore() {
-  useCartStore.setState({
-    products: [],
-    productsStatus: 'idle',
-    productsError: null,
-    quantities: {},
-    checkoutData: null,
-    submitStatus: 'idle',
-    submitError: null,
-    selectedPaymentMethodId: null,
-  })
-}
+import * as checkoutApi from '@/shared/api/checkout'
+import * as productsApi from '@/shared/api/products'
+import { MOCK_PRODUCTS } from '@/shared/api/products'
+import { renderWithProviders } from '@/test/utils/renderWithProviders'
 
 describe('App routing', () => {
   beforeEach(() => {
-    resetStore()
     vi.restoreAllMocks()
   })
 
   it('redirects root to products', async () => {
     vi.spyOn(productsApi, 'fetchProducts').mockResolvedValue(MOCK_PRODUCTS)
 
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <AppRouter />
-      </MemoryRouter>,
-    )
+    renderWithProviders(null, { route: '/' })
 
     await waitFor(() => {
       expect(screen.getByText('Choose your plans')).toBeInTheDocument()
@@ -73,11 +53,7 @@ describe('App routing', () => {
 
     const user = userEvent.setup()
 
-    render(
-      <MemoryRouter initialEntries={['/products']}>
-        <AppRouter />
-      </MemoryRouter>,
-    )
+    renderWithProviders(null, { route: '/products' })
 
     await waitFor(() => {
       expect(screen.getByText('Pro')).toBeInTheDocument()
@@ -97,7 +73,9 @@ describe('App routing', () => {
       expect(screen.getByText('Complete your purchase')).toBeInTheDocument()
     })
 
-    expect(screen.getByRole('radio', { name: /Credit or debit card/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('radio', { name: /Credit or debit card/i }),
+    ).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: /BLIK/i })).toBeInTheDocument()
   })
 })
