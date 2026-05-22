@@ -2,11 +2,14 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
 import { formatPriceMonthly } from '@/lib/format'
 import type { SummaryItem } from '@/types/product'
 
@@ -14,6 +17,10 @@ type CartSummaryProps = {
   items: SummaryItem[]
   total: number
   isLoading?: boolean
+  onCheckout?: () => void
+  isCheckoutDisabled?: boolean
+  isCheckoutLoading?: boolean
+  checkoutError?: string | null
 }
 
 function CartSummarySkeleton() {
@@ -23,6 +30,7 @@ function CartSummarySkeleton() {
       <Skeleton className="h-4 w-1/2" />
       <Separator />
       <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-10 w-full" />
     </div>
   )
 }
@@ -31,6 +39,10 @@ export function CartSummary({
   items,
   total,
   isLoading = false,
+  onCheckout,
+  isCheckoutDisabled = false,
+  isCheckoutLoading = false,
+  checkoutError = null,
 }: CartSummaryProps) {
   const isEmpty = items.length === 0
 
@@ -81,6 +93,32 @@ export function CartSummary({
           </>
         )}
       </CardContent>
+
+      {!isLoading && onCheckout ? (
+        <CardFooter className="flex-col items-stretch gap-2 border-t bg-muted/30">
+          {checkoutError ? (
+            <p className="text-sm text-destructive" role="alert">
+              {checkoutError}
+            </p>
+          ) : null}
+          <Button
+            type="button"
+            size="lg"
+            className="w-full"
+            disabled={isCheckoutDisabled || isCheckoutLoading}
+            onClick={onCheckout}
+          >
+            {isCheckoutLoading ? (
+              <>
+                <Loader2 className="animate-spin" aria-hidden="true" />
+                Processing...
+              </>
+            ) : (
+              'Continue to checkout'
+            )}
+          </Button>
+        </CardFooter>
+      ) : null}
     </Card>
   )
 }

@@ -1,18 +1,22 @@
 # Plan Picker
 
-A React app for selecting subscription plans with a live cost summary.
+A React SPA for selecting subscription plans, reviewing an order summary, and completing checkout with payment method selection.
 
 ## Features
 
-- plan list with quantity controls (`+` / `−`)
-- summary of selected plans and monthly total
-- mock API with simulated network delay
+- `/products` — plan list with quantity controls (`+` / `−`)
+- live order summary with monthly total
+- checkout submit via mock API
+- `/checkout` — payment method selection (card, BLIK, Apple Pay, Google Pay)
 - loading, error, and empty states
+- client-side routing with shared cart state
 
 ## Stack
 
 - React 19 + TypeScript
 - Vite
+- React Router
+- Zustand
 - Tailwind CSS + shadcn/ui
 - Vitest + React Testing Library
 
@@ -23,7 +27,15 @@ npm install
 npm run dev
 ```
 
-The app runs at `http://localhost:5173` by default.
+The app runs at `http://localhost:5173` and redirects to `/products`.
+
+## Routes
+
+| Route | Description |
+|-------|-------------|
+| `/` | redirects to `/products` |
+| `/products` | choose plans and continue to checkout |
+| `/checkout` | select a payment method for the current order |
 
 ## Scripts
 
@@ -41,13 +53,15 @@ The app runs at `http://localhost:5173` by default.
 
 ```
 src/
-├── api/          # data layer (mock fetch)
-├── hooks/        # React logic (fetch, cart)
+├── api/          # products + checkout mock APIs
+├── store/        # Zustand cart/checkout state
+├── pages/        # route-level views
+├── routes/       # React Router setup
 ├── lib/          # pure functions (cart, formatting)
-├── components/   # UI
+├── components/   # UI building blocks
 └── types/        # domain types
 ```
 
 ## Testing
 
-The project includes unit, component, and app-level smoke tests. CI runs lint, tests, and build on every push.
+The project includes unit, store, component, routing, and checkout flow tests. CI runs lint, tests, and build on every push.

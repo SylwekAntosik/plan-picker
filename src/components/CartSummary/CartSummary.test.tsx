@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
 import { CartSummary } from '@/components/CartSummary/CartSummary'
 
 const product = {
@@ -43,5 +44,30 @@ describe('CartSummary', () => {
     expect(screen.getByText(/Pro/)).toBeInTheDocument()
     expect(screen.getByText('× 2')).toBeInTheDocument()
     expect(screen.getAllByText('$80/mo')).toHaveLength(2)
+  })
+
+  it('renders checkout action when handler is provided', async () => {
+    const user = userEvent.setup()
+    const onCheckout = vi.fn()
+
+    render(
+      <CartSummary
+        items={[
+          {
+            product,
+            quantity: 1,
+            lineTotal: 40,
+          },
+        ]}
+        total={40}
+        onCheckout={onCheckout}
+      />,
+    )
+
+    await user.click(
+      screen.getByRole('button', { name: 'Continue to checkout' }),
+    )
+
+    expect(onCheckout).toHaveBeenCalledOnce()
   })
 })
