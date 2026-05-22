@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit'
 import { catalogApi } from '@/features/catalog/api/catalogApi'
-import { buildSummaryItems, calculateTotal } from '@/lib/cart'
-import { getErrorMessage } from '@/shared/lib/getErrorMessage'
+import { buildSummaryItems, calculateTotal } from '@/features/cart/lib/cart'
+import { getErrorMessage } from '@/lib/getErrorMessage'
 import type { RootState } from '@/app/store/rootReducer'
 
 const selectCartQuantities = (state: RootState) => state.cart.quantities

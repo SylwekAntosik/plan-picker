@@ -1,9 +1,6 @@
 import { ArrowLeft, Loader2, ShieldCheck } from 'lucide-react'
 import { Link, Navigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { CheckoutStepper } from '@/components/checkout/CheckoutStepper'
-import { OrderSummaryPanel } from '@/components/checkout/OrderSummaryPanel'
-import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
@@ -14,6 +11,9 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import {
+  CheckoutStepper,
+  OrderSummaryPanel,
+  PaymentMethodSelector,
   selectCheckoutData,
   selectPaymentMethod,
   selectSelectedPaymentMethodId,

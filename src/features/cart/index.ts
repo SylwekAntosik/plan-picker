@@ -15,3 +15,5 @@ export {
   selectCartTotal,
   selectHasSelectedPlans,
 } from './model/selectors'
+export { CartSummary } from './components/CartSummary'
+export type { CartQuantities } from './types'

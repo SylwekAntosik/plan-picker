@@ -1,10 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
-import { CartSummary } from '@/components/CartSummary/CartSummary'
-import { CheckoutStepper } from '@/components/checkout/CheckoutStepper'
 import { PageLayout } from '@/components/layout/PageLayout'
-import { ProductList } from '@/components/ProductList/ProductList'
 import {
+  CartSummary,
   decrementQuantity,
   incrementQuantity,
   selectCartTotal,
@@ -14,9 +12,15 @@ import {
   selectProductsLoading,
   selectSummaryItems,
 } from '@/features/cart'
-import { useGetProductsQuery } from '@/features/catalog'
-import { useSubmitOrderMutation } from '@/features/checkout'
-import { getErrorMessage } from '@/shared/lib/getErrorMessage'
+import {
+  ProductList,
+  useGetProductsQuery,
+} from '@/features/catalog'
+import {
+  CheckoutStepper,
+  useSubmitOrderMutation,
+} from '@/features/checkout'
+import { getErrorMessage } from '@/lib/getErrorMessage'
 
 export function ProductsPage() {
   const navigate = useNavigate()

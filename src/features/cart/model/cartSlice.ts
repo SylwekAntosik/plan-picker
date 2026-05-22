@@ -1,7 +1,8 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { catalogApi } from '@/features/catalog/api/catalogApi'
-import { cartReducer as applyCartAction } from '@/lib/cart'
-import type { CartQuantities, Product, ProductId } from '@/types/product'
+import type { Product, ProductId } from '@/api/products/types'
+import { cartReducer as applyCartAction } from '@/features/cart/lib/cart'
+import type { CartQuantities } from '@/features/cart/types'
 
 export type CartState = {
   quantities: CartQuantities

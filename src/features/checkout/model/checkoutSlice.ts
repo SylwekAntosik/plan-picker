@@ -1,7 +1,9 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { checkoutApi } from '@/features/checkout/api/checkoutApi'
-import type { CheckoutPageData } from '@/types/checkout'
-import type { PaymentMethodId } from '@/types/payment'
+import type {
+  CheckoutPageData,
+  PaymentMethodId,
+} from '@/api/checkout/types'
 
 export type CheckoutState = {
   checkoutData: CheckoutPageData | null

@@ -1,7 +1,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
-import { submitOrder as submitOrderRequest } from '@/shared/api/checkout'
-import type { CheckoutPageData } from '@/types/checkout'
-import type { SummaryItem } from '@/types/product'
+import { submitOrder as submitOrderRequest } from '@/api/checkout/checkout'
+import type { CheckoutPageData } from '@/api/checkout/types'
+import type { SummaryItem } from '@/api/products/types'
 
 export const checkoutApi = createApi({
   reducerPath: 'checkoutApi',
