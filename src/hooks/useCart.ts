@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useReducer } from 'react'
 import {
   buildSummaryItems,
   calculateTotal,
@@ -22,13 +22,21 @@ export function useCart(products: Product[]) {
 
   const total = useMemo(() => calculateTotal(summaryItems), [summaryItems])
 
+  const increment = useCallback(
+    (productId: ProductId) => dispatch({ type: 'INCREMENT', productId }),
+    [],
+  )
+
+  const decrement = useCallback(
+    (productId: ProductId) => dispatch({ type: 'DECREMENT', productId }),
+    [],
+  )
+
   return {
     quantities,
     summaryItems,
     total,
-    increment: (productId: ProductId) =>
-      dispatch({ type: 'INCREMENT', productId }),
-    decrement: (productId: ProductId) =>
-      dispatch({ type: 'DECREMENT', productId }),
+    increment,
+    decrement,
   }
 }

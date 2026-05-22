@@ -11,6 +11,10 @@ export type CartAction =
   | { type: 'INCREMENT'; productId: ProductId }
   | { type: 'DECREMENT'; productId: ProductId }
 
+function assertNever(value: never): never {
+  throw new Error(`Unhandled cart action: ${JSON.stringify(value)}`)
+}
+
 export function clampQuantity(quantity: number): number {
   return Math.max(MIN_QUANTITY, quantity)
 }
@@ -49,11 +53,17 @@ export function cartReducer(
   action: CartAction,
 ): CartQuantities {
   switch (action.type) {
-    case 'SYNC_PRODUCTS':
-      return action.products.reduce<CartQuantities>((next, product) => {
-        next[product.id] = state[product.id] ?? MIN_QUANTITY
-        return next
-      }, {})
+    case 'SYNC_PRODUCTS': {
+      const next = createInitialQuantities(action.products)
+
+      for (const product of action.products) {
+        if (state[product.id] !== undefined) {
+          next[product.id] = state[product.id]
+        }
+      }
+
+      return next
+    }
     case 'INCREMENT':
       return {
         ...state,
@@ -67,6 +77,6 @@ export function cartReducer(
         ),
       }
     default:
-      return state
+      return assertNever(action)
   }
 }

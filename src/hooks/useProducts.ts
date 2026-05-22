@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { fetchProducts } from '@/api/products'
 import type { Product } from '@/types/product'
 
-type ProductsStatus = 'idle' | 'loading' | 'success' | 'error'
+type ProductsStatus = 'loading' | 'success' | 'error'
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([])

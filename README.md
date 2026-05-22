@@ -1,73 +1,53 @@
-# React + TypeScript + Vite
+# Plan Picker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Prosta aplikacja React do wyboru planów subskrypcyjnych z podsumowaniem kosztów.
 
-Currently, two official plugins are available:
+## Funkcje
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- lista planów z kontrolką ilości (`+` / `−`)
+- podsumowanie wybranych planów i sumy miesięcznej
+- mock API z opóźnieniem sieciowym
+- stany loading / error / empty
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + TypeScript
+- Vite
+- Tailwind CSS + shadcn/ui
+- Vitest + React Testing Library
 
-## Expanding the ESLint configuration
+## Uruchomienie
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Aplikacja domyślnie startuje pod `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Skrypty
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Komenda | Opis |
+|---------|------|
+| `npm run dev` | serwer developerski |
+| `npm run build` | build produkcyjny |
+| `npm run preview` | podgląd buildu |
+| `npm run test` | testy w trybie watch |
+| `npm run test:run` | testy jednorazowo |
+| `npm run test:coverage` | testy z coverage |
+| `npm run lint` | ESLint |
+
+## Architektura
+
 ```
+src/
+├── api/          # warstwa danych (mock fetch)
+├── hooks/        # logika React (fetch, koszyk)
+├── lib/          # pure functions (koszyk, formatowanie)
+├── components/   # UI
+└── types/        # typy domenowe
+```
+
+## Testy
+
+Projekt zawiera testy jednostkowe, komponentowe i smoke test całej aplikacji. CI uruchamia lint, testy i build przy każdym pushu.

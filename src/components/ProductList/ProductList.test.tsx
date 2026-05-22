@@ -43,4 +43,20 @@ describe('ProductList', () => {
 
     expect(screen.getByText('Standard')).toBeInTheDocument()
   })
+
+  it('shows an error message when loading fails', () => {
+    render(
+      <ProductList
+        products={[]}
+        quantities={{}}
+        isLoading={false}
+        isError
+        error="Network error"
+        onIncrement={() => undefined}
+        onDecrement={() => undefined}
+      />,
+    )
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Network error')
+  })
 })

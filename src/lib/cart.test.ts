@@ -78,6 +78,25 @@ describe('calculateTotal', () => {
 })
 
 describe('cartReducer', () => {
+  it('initializes quantities for synced products', () => {
+    const state = cartReducer({}, { type: 'SYNC_PRODUCTS', products })
+
+    expect(state).toEqual({
+      standard: 0,
+      pro: 0,
+      'pro-plus': 0,
+    })
+  })
+
+  it('preserves existing quantities when products resync', () => {
+    let state = cartReducer({}, { type: 'SYNC_PRODUCTS', products })
+    state = cartReducer(state, { type: 'INCREMENT', productId: 'pro' })
+
+    state = cartReducer(state, { type: 'SYNC_PRODUCTS', products })
+
+    expect(state.pro).toBe(1)
+  })
+
   it('increments and decrements quantities without going below zero', () => {
     let state = cartReducer({}, { type: 'SYNC_PRODUCTS', products })
 

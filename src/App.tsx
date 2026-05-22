@@ -24,7 +24,7 @@ export default function App() {
           onDecrement={decrement}
         />
       }
-      summary={<CartSummary items={summaryItems} total={total} />}
+      summary={<CartSummary items={summaryItems} total={total} isLoading={isLoading} />}
     />
   )
 }

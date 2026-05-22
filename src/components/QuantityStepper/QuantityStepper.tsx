@@ -31,6 +31,7 @@ export function QuantityStepper({
       </Button>
       <span
         className="min-w-8 text-center text-sm font-medium tabular-nums"
+        role="status"
         aria-live="polite"
         aria-label={`Ilość planu ${productName}`}
       >

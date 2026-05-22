@@ -6,6 +6,16 @@ import * as productsApi from '@/api/products'
 import { MOCK_PRODUCTS } from '@/api/products'
 
 describe('App', () => {
+  it('shows loading summary before products arrive', () => {
+    vi.spyOn(productsApi, 'fetchProducts').mockImplementation(
+      () => new Promise(() => undefined),
+    )
+
+    render(<App />)
+
+    expect(screen.getByLabelText('Ładowanie podsumowania')).toBeInTheDocument()
+  })
+
   it('loads products and updates summary after increment', async () => {
     vi.spyOn(productsApi, 'fetchProducts').mockResolvedValue(MOCK_PRODUCTS)
     const user = userEvent.setup()
