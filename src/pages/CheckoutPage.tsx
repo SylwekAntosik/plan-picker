@@ -1,5 +1,7 @@
 import { ArrowLeft, Loader2, ShieldCheck } from 'lucide-react'
 import { Link, Navigate } from 'react-router-dom'
+import type { CheckoutPageData } from '@/api/checkout/types'
+import type { PaymentMethod } from '@/api/checkout/types'
 import { PageLayout } from '@/components/layout/PageLayout'
 import { Button, buttonVariants } from '@/components/ui/button'
 import {
@@ -9,22 +11,21 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import {
-  CheckoutStepper,
-  OrderSummaryPanel,
-  PaymentMethodSelector,
-} from '@/features/checkout'
+import { CheckoutStepper } from '@/features/checkout/components/CheckoutStepper'
+import { OrderSummaryPanel } from '@/features/checkout/components/OrderSummaryPanel'
+import { PaymentMethodSelector } from '@/features/checkout/components/PaymentMethodSelector'
 import { cn } from '@/lib/utils'
 import { useCheckoutPage } from '@/pages/useCheckoutPage'
 
-export function CheckoutPage() {
-  const {
-    checkoutData,
-    selectedPaymentMethodId,
-    selectedMethod,
-    selectPayment,
-  } = useCheckoutPage()
+export type CheckoutPageViewProps = {
+  checkoutData: CheckoutPageData | null
+  selectedMethod?: PaymentMethod
+}
 
+export function CheckoutPageView({
+  checkoutData,
+  selectedMethod,
+}: CheckoutPageViewProps) {
   if (!checkoutData) {
     return <Navigate to="/products" replace />
   }
@@ -55,11 +56,7 @@ export function CheckoutPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <PaymentMethodSelector
-                methods={checkoutData.paymentMethods}
-                selectedMethodId={selectedPaymentMethodId}
-                onSelect={selectPayment}
-              />
+              <PaymentMethodSelector />
             </CardContent>
           </Card>
 
@@ -94,13 +91,18 @@ export function CheckoutPage() {
           </p>
         </div>
       }
-      summary={
-        <OrderSummaryPanel
-          items={checkoutData.items}
-          total={checkoutData.total}
-          orderId={checkoutData.session.orderId}
-        />
-      }
+      summary={<OrderSummaryPanel />}
+    />
+  )
+}
+
+export function CheckoutPage() {
+  const { checkoutData, selectedMethod } = useCheckoutPage()
+
+  return (
+    <CheckoutPageView
+      checkoutData={checkoutData}
+      selectedMethod={selectedMethod}
     />
   )
 }

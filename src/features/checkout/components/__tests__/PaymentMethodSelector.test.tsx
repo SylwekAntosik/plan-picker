@@ -1,7 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { PaymentMethodSelector } from '@/features/checkout/components/PaymentMethodSelector'
+import { PaymentMethodSelector, PaymentMethodSelectorView } from '@/features/checkout/components/PaymentMethodSelector'
+import { renderWithProviders } from '@/test/utils/renderWithProviders'
 
 const methods = [
   {
@@ -23,7 +24,7 @@ describe('PaymentMethodSelector', () => {
     const onSelect = vi.fn()
 
     render(
-      <PaymentMethodSelector
+      <PaymentMethodSelectorView
         methods={methods}
         selectedMethodId="card"
         onSelect={onSelect}
@@ -37,7 +38,7 @@ describe('PaymentMethodSelector', () => {
 
   it('renders optional badges', () => {
     render(
-      <PaymentMethodSelector
+      <PaymentMethodSelectorView
         methods={methods}
         selectedMethodId="blik"
         onSelect={() => undefined}
@@ -45,5 +46,13 @@ describe('PaymentMethodSelector', () => {
     )
 
     expect(screen.getByText('Popular')).toBeInTheDocument()
+  })
+
+  it('renders an empty list when checkout data is missing', () => {
+    renderWithProviders(<PaymentMethodSelector />)
+
+    expect(
+      screen.getByRole('radiogroup', { name: 'Payment methods' }),
+    ).toBeEmptyDOMElement()
   })
 })

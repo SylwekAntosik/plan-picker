@@ -1,4 +1,5 @@
 import type { SummaryItem } from '@/api/products/types'
+import { useOrderSummaryPanel } from '@/features/checkout/components/useOrderSummaryPanel'
 import {
   Card,
   CardContent,
@@ -9,17 +10,17 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { formatPriceMonthly } from '@/lib/format'
 
-type OrderSummaryPanelProps = {
+export type OrderSummaryPanelViewProps = {
   items: SummaryItem[]
   total: number
   orderId?: string
 }
 
-export function OrderSummaryPanel({
+export function OrderSummaryPanelView({
   items,
   total,
   orderId,
-}: OrderSummaryPanelProps) {
+}: OrderSummaryPanelViewProps) {
   return (
     <Card className="lg:sticky lg:top-8">
       <CardHeader>
@@ -58,5 +59,13 @@ export function OrderSummaryPanel({
         </div>
       </CardContent>
     </Card>
+  )
+}
+
+export function OrderSummaryPanel() {
+  const { items, total, orderId } = useOrderSummaryPanel()
+
+  return (
+    <OrderSummaryPanelView items={items} total={total} orderId={orderId} />
   )
 }

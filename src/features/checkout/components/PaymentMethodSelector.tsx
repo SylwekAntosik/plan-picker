@@ -2,20 +2,21 @@ import type {
   PaymentMethod,
   PaymentMethodId,
 } from '@/api/checkout/types'
+import { usePaymentMethodSelector } from '@/features/checkout/components/usePaymentMethodSelector'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 
-type PaymentMethodSelectorProps = {
+export type PaymentMethodSelectorViewProps = {
   methods: PaymentMethod[]
   selectedMethodId: PaymentMethodId | null
   onSelect: (methodId: PaymentMethodId) => void
 }
 
-export function PaymentMethodSelector({
+export function PaymentMethodSelectorView({
   methods,
   selectedMethodId,
   onSelect,
-}: PaymentMethodSelectorProps) {
+}: PaymentMethodSelectorViewProps) {
   return (
     <div className="grid gap-3" role="radiogroup" aria-label="Payment methods">
       {methods.map((method) => {
@@ -61,5 +62,18 @@ export function PaymentMethodSelector({
         )
       })}
     </div>
+  )
+}
+
+export function PaymentMethodSelector() {
+  const { methods, selectedMethodId, selectPayment } =
+    usePaymentMethodSelector()
+
+  return (
+    <PaymentMethodSelectorView
+      methods={methods}
+      selectedMethodId={selectedMethodId}
+      onSelect={selectPayment}
+    />
   )
 }

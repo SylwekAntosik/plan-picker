@@ -9,5 +9,7 @@ export {
 } from './model/checkoutSlice'
 export type { CheckoutState } from './model/checkoutSlice'
 export { CheckoutStepper } from './components/CheckoutStepper'
-export { OrderSummaryPanel } from './components/OrderSummaryPanel'
 export { PaymentMethodSelector } from './components/PaymentMethodSelector'
+export { PaymentMethodSelectorView } from './components/PaymentMethodSelector'
+export { OrderSummaryPanel } from './components/OrderSummaryPanel'
+export { OrderSummaryPanelView } from './components/OrderSummaryPanel'

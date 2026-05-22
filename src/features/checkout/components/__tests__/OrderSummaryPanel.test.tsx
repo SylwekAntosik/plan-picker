@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { OrderSummaryPanel } from '@/features/checkout/components/OrderSummaryPanel'
+import { OrderSummaryPanel, OrderSummaryPanelView } from '@/features/checkout/components/OrderSummaryPanel'
+import { renderWithProviders } from '@/test/utils/renderWithProviders'
 
 const product = {
   id: 'pro' as const,
@@ -12,7 +13,7 @@ const product = {
 describe('OrderSummaryPanel', () => {
   it('shows a generic description when order id is missing', () => {
     render(
-      <OrderSummaryPanel
+      <OrderSummaryPanelView
         items={[{ product, quantity: 1, lineTotal: 40 }]}
         total={40}
       />,
@@ -25,7 +26,7 @@ describe('OrderSummaryPanel', () => {
 
   it('shows order id in the description when provided', () => {
     render(
-      <OrderSummaryPanel
+      <OrderSummaryPanelView
         items={[{ product, quantity: 1, lineTotal: 40 }]}
         total={40}
         orderId="ord_test"
@@ -35,5 +36,14 @@ describe('OrderSummaryPanel', () => {
     expect(
       screen.getByText('Order ord_test · monthly billing'),
     ).toBeInTheDocument()
+  })
+
+  it('renders empty summary when checkout data is missing', () => {
+    renderWithProviders(<OrderSummaryPanel />)
+
+    expect(
+      screen.getByText('Selected plans and estimated monthly cost.'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('$0/mo')).toBeInTheDocument()
   })
 })

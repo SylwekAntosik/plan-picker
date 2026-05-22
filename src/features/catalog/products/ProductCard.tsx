@@ -1,5 +1,6 @@
 import type { Product } from '@/api/products/types'
 import { QuantityStepper } from '@/features/catalog/products/QuantityStepper'
+import { useProductCard } from '@/features/catalog/products/useProductCard'
 import { Badge } from '@/components/ui/badge'
 import {
   Card,
@@ -10,19 +11,19 @@ import {
 } from '@/components/ui/card'
 import { formatPriceMonthly } from '@/lib/format'
 
-type ProductCardProps = {
+export type ProductCardViewProps = {
   product: Product
   quantity: number
   onIncrement: () => void
   onDecrement: () => void
 }
 
-export function ProductCard({
+export function ProductCardView({
   product,
   quantity,
   onIncrement,
   onDecrement,
-}: ProductCardProps) {
+}: ProductCardViewProps) {
   return (
     <Card className="transition-shadow hover:shadow-sm">
       <CardHeader className="border-b">
@@ -45,5 +46,22 @@ export function ProductCard({
         />
       </CardFooter>
     </Card>
+  )
+}
+
+export type ProductCardProps = {
+  product: Product
+}
+
+export function ProductCard({ product }: ProductCardProps) {
+  const { quantity, increment, decrement } = useProductCard(product.id)
+
+  return (
+    <ProductCardView
+      product={product}
+      quantity={quantity}
+      onIncrement={increment}
+      onDecrement={decrement}
+    />
   )
 }

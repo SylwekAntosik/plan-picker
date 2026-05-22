@@ -70,7 +70,7 @@ Each module keeps tests in a co-located `__tests__/` folder. Feature-specific UI
 
 Features expose a public API via `features/*/index.ts` so other modules depend on stable boundaries, not internal files.
 
-Page components keep Redux wiring in a co-located hook named `use{ComponentName}` (for example `useProductsPage.ts` next to `ProductsPage.tsx`). The component stays presentational; the hook owns selectors, mutations, and dispatch.
+Components that need Redux use a co-located hook in `useComponent.ts` (for example `useProductList`, `useCartSummary`). The component calls the hook internally so pages stay layout-only. Presentational `*View` exports stay in `Component.tsx` for unit tests without the store; wired components are tested with `renderWithProviders`.
 
 ## Scripts
 

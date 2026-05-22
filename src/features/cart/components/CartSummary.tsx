@@ -1,4 +1,5 @@
 import type { SummaryItem } from '@/api/products/types'
+import { useCartSummary } from '@/features/cart/components/useCartSummary'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -13,14 +14,14 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatPriceMonthly } from '@/lib/format'
 import { Loader2 } from 'lucide-react'
 
-type CartSummaryProps = {
+export type CartSummaryViewProps = {
   items: SummaryItem[]
   total: number
-  isLoading?: boolean
-  onCheckout?: () => void
-  isCheckoutDisabled?: boolean
-  isCheckoutLoading?: boolean
-  checkoutError?: string | null
+  isLoading: boolean
+  isCheckoutDisabled: boolean
+  isCheckoutLoading: boolean
+  checkoutError: string | null
+  onCheckout: () => void
 }
 
 function CartSummarySkeleton() {
@@ -35,15 +36,15 @@ function CartSummarySkeleton() {
   )
 }
 
-export function CartSummary({
+export function CartSummaryView({
   items,
   total,
-  isLoading = false,
+  isLoading,
+  isCheckoutDisabled,
+  isCheckoutLoading,
+  checkoutError,
   onCheckout,
-  isCheckoutDisabled = false,
-  isCheckoutLoading = false,
-  checkoutError = null,
-}: CartSummaryProps) {
+}: CartSummaryViewProps) {
   const isEmpty = items.length === 0
 
   return (
@@ -94,7 +95,7 @@ export function CartSummary({
         )}
       </CardContent>
 
-      {!isLoading && onCheckout ? (
+      {!isLoading ? (
         <CardFooter className="flex-col items-stretch gap-2 border-t bg-muted/30">
           {checkoutError ? (
             <p className="text-sm text-destructive" role="alert">
@@ -120,5 +121,29 @@ export function CartSummary({
         </CardFooter>
       ) : null}
     </Card>
+  )
+}
+
+export function CartSummary() {
+  const {
+    items,
+    total,
+    isLoading,
+    isCheckoutDisabled,
+    isCheckoutLoading,
+    checkoutError,
+    checkout,
+  } = useCartSummary()
+
+  return (
+    <CartSummaryView
+      items={items}
+      total={total}
+      isLoading={isLoading}
+      isCheckoutDisabled={isCheckoutDisabled}
+      isCheckoutLoading={isCheckoutLoading}
+      checkoutError={checkoutError}
+      onCheckout={checkout}
+    />
   )
 }
