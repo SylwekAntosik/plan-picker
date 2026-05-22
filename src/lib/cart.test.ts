@@ -4,7 +4,6 @@ import {
   calculateTotal,
   cartReducer,
   clampQuantity,
-  type CartAction,
 } from '@/lib/cart'
 import type { Product } from '@/types/product'
 
@@ -133,7 +132,11 @@ describe('cartReducer', () => {
 
   it('throws for unsupported actions', () => {
     expect(() =>
-      cartReducer({}, { type: 'UNKNOWN' } as CartAction),
+      cartReducer(
+        {},
+        // @ts-expect-error intentional invalid action for exhaustiveness coverage
+        { type: 'UNKNOWN' },
+      ),
     ).toThrow('Unhandled cart action')
   })
 })
