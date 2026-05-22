@@ -5,7 +5,7 @@ import { CartSummary } from '@/components/CartSummary/CartSummary'
 const product = {
   id: 'pro' as const,
   name: 'Pro',
-  description: 'Więcej mocy',
+  description: 'More power',
   priceMonthly: 40,
 }
 
@@ -13,17 +13,17 @@ describe('CartSummary', () => {
   it('shows loading skeleton while products are loading', () => {
     render(<CartSummary items={[]} total={0} isLoading />)
 
-    expect(screen.getByLabelText('Ładowanie podsumowania')).toBeInTheDocument()
+    expect(screen.getByLabelText('Loading summary')).toBeInTheDocument()
     expect(
-      screen.queryByText('Nie wybrano żadnych planów.'),
+      screen.queryByText('No plans selected yet.'),
     ).not.toBeInTheDocument()
   })
 
   it('shows empty state when nothing is selected', () => {
     render(<CartSummary items={[]} total={0} />)
 
-    expect(screen.getByText('Nie wybrano żadnych planów.')).toBeInTheDocument()
-    expect(screen.getByText('$0/mies.')).toBeInTheDocument()
+    expect(screen.getByText('No plans selected yet.')).toBeInTheDocument()
+    expect(screen.getByText('$0/mo')).toBeInTheDocument()
   })
 
   it('shows selected items and total', () => {
@@ -42,6 +42,6 @@ describe('CartSummary', () => {
 
     expect(screen.getByText(/Pro/)).toBeInTheDocument()
     expect(screen.getByText('× 2')).toBeInTheDocument()
-    expect(screen.getAllByText('$80/mies.')).toHaveLength(2)
+    expect(screen.getAllByText('$80/mo')).toHaveLength(2)
   })
 })

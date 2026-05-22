@@ -11,8 +11,8 @@ export default function App() {
 
   return (
     <PageLayout
-      title="Wybierz plany"
-      description="Dodaj tyle planów, ile potrzebujesz. Podsumowanie aktualizuje się na bieżąco."
+      title="Choose your plans"
+      description="Add as many plans as you need. The summary updates in real time."
       products={
         <ProductList
           products={products}

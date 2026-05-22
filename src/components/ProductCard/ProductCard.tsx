@@ -32,7 +32,7 @@ export function ProductCard({
             <CardDescription>{product.description}</CardDescription>
           </div>
           <Badge variant="secondary" className="shrink-0 tabular-nums">
-            {formatPriceMonthly(product.priceMonthly)}/mies.
+            {formatPriceMonthly(product.priceMonthly)}/mo
           </Badge>
         </div>
       </CardHeader>

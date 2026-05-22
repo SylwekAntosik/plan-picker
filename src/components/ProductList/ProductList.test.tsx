@@ -25,7 +25,7 @@ describe('ProductList', () => {
       />,
     )
 
-    expect(screen.getByLabelText('Ładowanie planów')).toBeInTheDocument()
+    expect(screen.getByLabelText('Loading plans')).toBeInTheDocument()
   })
 
   it('renders products when loaded', () => {

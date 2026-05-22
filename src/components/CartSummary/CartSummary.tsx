@@ -18,7 +18,7 @@ type CartSummaryProps = {
 
 function CartSummarySkeleton() {
   return (
-    <div className="space-y-4" aria-label="Ładowanie podsumowania">
+    <div className="space-y-4" aria-label="Loading summary">
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
       <Separator />
@@ -37,9 +37,9 @@ export function CartSummary({
   return (
     <Card className="lg:sticky lg:top-8">
       <CardHeader>
-        <CardTitle>Podsumowanie</CardTitle>
+        <CardTitle>Summary</CardTitle>
         <CardDescription>
-          Wybrane plany i szacunkowy koszt miesięczny.
+          Selected plans and estimated monthly cost.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -49,10 +49,10 @@ export function CartSummary({
           <>
             {isEmpty ? (
               <p className="text-sm text-muted-foreground">
-                Nie wybrano żadnych planów.
+                No plans selected yet.
               </p>
             ) : (
-              <ul className="space-y-3" aria-label="Wybrane plany">
+              <ul className="space-y-3" aria-label="Selected plans">
                 {items.map(({ product, quantity, lineTotal }) => (
                   <li
                     key={product.id}
@@ -63,7 +63,7 @@ export function CartSummary({
                       <span className="text-muted-foreground">× {quantity}</span>
                     </span>
                     <span className="shrink-0 tabular-nums font-medium">
-                      {formatPriceMonthly(lineTotal)}/mies.
+                      {formatPriceMonthly(lineTotal)}/mo
                     </span>
                   </li>
                 ))}
@@ -73,9 +73,9 @@ export function CartSummary({
             <Separator />
 
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium">Razem</span>
+              <span className="font-medium">Total</span>
               <span className="text-base font-semibold tabular-nums">
-                {formatPriceMonthly(total)}/mies.
+                {formatPriceMonthly(total)}/mo
               </span>
             </div>
           </>

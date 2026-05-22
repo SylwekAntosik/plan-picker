@@ -23,8 +23,8 @@ export function PageLayout({
       </header>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:items-start">
-        <section aria-label="Lista planów">{products}</section>
-        <aside aria-label="Podsumowanie zamówienia">{summary}</aside>
+        <section aria-label="Plan list">{products}</section>
+        <aside aria-label="Order summary">{summary}</aside>
       </div>
     </div>
   )

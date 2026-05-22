@@ -29,7 +29,7 @@ export function useProducts() {
         setError(
           cause instanceof Error
             ? cause.message
-            : 'Nie udało się pobrać listy planów.',
+            : 'Failed to load plans.',
         )
         setStatus('error')
       })

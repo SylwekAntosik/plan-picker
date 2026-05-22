@@ -23,7 +23,7 @@ export function QuantityStepper({
         type="button"
         variant="outline"
         size="icon-sm"
-        aria-label={`Zmniejsz ilość planu ${productName}`}
+        aria-label={`Decrease ${productName} quantity`}
         disabled={isDecrementDisabled}
         onClick={onDecrement}
       >
@@ -33,7 +33,7 @@ export function QuantityStepper({
         className="min-w-8 text-center text-sm font-medium tabular-nums"
         role="status"
         aria-live="polite"
-        aria-label={`Ilość planu ${productName}`}
+        aria-label={`${productName} quantity`}
       >
         {quantity}
       </span>
@@ -41,7 +41,7 @@ export function QuantityStepper({
         type="button"
         variant="outline"
         size="icon-sm"
-        aria-label={`Zwiększ ilość planu ${productName}`}
+        aria-label={`Increase ${productName} quantity`}
         onClick={onIncrement}
       >
         <Plus aria-hidden="true" />

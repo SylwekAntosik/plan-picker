@@ -6,7 +6,7 @@ import { ProductCard } from '@/components/ProductCard/ProductCard'
 const product = {
   id: 'pro' as const,
   name: 'Pro',
-  description: 'Więcej mocy',
+  description: 'More power',
   priceMonthly: 40,
 }
 
@@ -25,10 +25,10 @@ describe('ProductCard', () => {
     )
 
     expect(screen.getByText('Pro')).toBeInTheDocument()
-    expect(screen.getByText('$40/mies.')).toBeInTheDocument()
+    expect(screen.getByText('$40/mo')).toBeInTheDocument()
 
     await user.click(
-      screen.getByRole('button', { name: 'Zwiększ ilość planu Pro' }),
+      screen.getByRole('button', { name: 'Increase Pro quantity' }),
     )
 
     expect(onIncrement).toHaveBeenCalledOnce()

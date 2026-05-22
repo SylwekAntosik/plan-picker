@@ -14,7 +14,7 @@ type ProductListProps = {
 
 function ProductListSkeleton() {
   return (
-    <div className="space-y-4" aria-label="Ładowanie planów">
+    <div className="space-y-4" aria-label="Loading plans">
       {Array.from({ length: 4 }).map((_, index) => (
         <Skeleton key={index} className="h-32 w-full rounded-xl" />
       ))}
@@ -41,7 +41,7 @@ export function ProductList({
         role="alert"
         className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
       >
-        {error ?? 'Nie udało się pobrać listy planów.'}
+        {error ?? 'Failed to load plans.'}
       </div>
     )
   }

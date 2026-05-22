@@ -19,11 +19,11 @@ describe('QuantityStepper', () => {
     )
 
     expect(
-      screen.getByRole('button', { name: 'Zmniejsz ilość planu Pro' }),
+      screen.getByRole('button', { name: 'Decrease Pro quantity' }),
     ).toBeDisabled()
 
     await user.click(
-      screen.getByRole('button', { name: 'Zwiększ ilość planu Pro' }),
+      screen.getByRole('button', { name: 'Increase Pro quantity' }),
     )
 
     expect(onIncrement).toHaveBeenCalledOnce()

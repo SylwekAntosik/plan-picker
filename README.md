@@ -1,13 +1,13 @@
 # Plan Picker
 
-Prosta aplikacja React do wyboru planów subskrypcyjnych z podsumowaniem kosztów.
+A React app for selecting subscription plans with a live cost summary.
 
-## Funkcje
+## Features
 
-- lista planów z kontrolką ilości (`+` / `−`)
-- podsumowanie wybranych planów i sumy miesięcznej
-- mock API z opóźnieniem sieciowym
-- stany loading / error / empty
+- plan list with quantity controls (`+` / `−`)
+- summary of selected plans and monthly total
+- mock API with simulated network delay
+- loading, error, and empty states
 
 ## Stack
 
@@ -16,38 +16,38 @@ Prosta aplikacja React do wyboru planów subskrypcyjnych z podsumowaniem kosztó
 - Tailwind CSS + shadcn/ui
 - Vitest + React Testing Library
 
-## Uruchomienie
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Aplikacja domyślnie startuje pod `http://localhost:5173`.
+The app runs at `http://localhost:5173` by default.
 
-## Skrypty
+## Scripts
 
-| Komenda | Opis |
-|---------|------|
-| `npm run dev` | serwer developerski |
-| `npm run build` | build produkcyjny |
-| `npm run preview` | podgląd buildu |
-| `npm run test` | testy w trybie watch |
-| `npm run test:run` | testy jednorazowo |
-| `npm run test:coverage` | testy z coverage |
-| `npm run lint` | ESLint |
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | start the dev server |
+| `npm run build` | production build |
+| `npm run preview` | preview the production build |
+| `npm run test` | run tests in watch mode |
+| `npm run test:run` | run tests once |
+| `npm run test:coverage` | run tests with coverage |
+| `npm run lint` | run ESLint |
 
-## Architektura
+## Architecture
 
 ```
 src/
-├── api/          # warstwa danych (mock fetch)
-├── hooks/        # logika React (fetch, koszyk)
-├── lib/          # pure functions (koszyk, formatowanie)
+├── api/          # data layer (mock fetch)
+├── hooks/        # React logic (fetch, cart)
+├── lib/          # pure functions (cart, formatting)
 ├── components/   # UI
-└── types/        # typy domenowe
+└── types/        # domain types
 ```
 
-## Testy
+## Testing
 
-Projekt zawiera testy jednostkowe, komponentowe i smoke test całej aplikacji. CI uruchamia lint, testy i build przy każdym pushu.
+The project includes unit, component, and app-level smoke tests. CI runs lint, tests, and build on every push.

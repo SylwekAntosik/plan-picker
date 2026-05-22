@@ -13,7 +13,7 @@ describe('App', () => {
 
     render(<App />)
 
-    expect(screen.getByLabelText('Ładowanie podsumowania')).toBeInTheDocument()
+    expect(screen.getByLabelText('Loading summary')).toBeInTheDocument()
   })
 
   it('loads products and updates summary after increment', async () => {
@@ -26,16 +26,16 @@ describe('App', () => {
       expect(screen.getByText('Pro')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Nie wybrano żadnych planów.')).toBeInTheDocument()
+    expect(screen.getByText('No plans selected yet.')).toBeInTheDocument()
 
     await user.click(
-      screen.getByRole('button', { name: 'Zwiększ ilość planu Pro' }),
+      screen.getByRole('button', { name: 'Increase Pro quantity' }),
     )
     await user.click(
-      screen.getByRole('button', { name: 'Zwiększ ilość planu Pro' }),
+      screen.getByRole('button', { name: 'Increase Pro quantity' }),
     )
 
     expect(screen.getByText('× 2')).toBeInTheDocument()
-    expect(screen.getAllByText('$80/mies.')).toHaveLength(2)
+    expect(screen.getAllByText('$80/mo')).toHaveLength(2)
   })
 })
