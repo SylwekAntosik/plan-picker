@@ -78,4 +78,4 @@ Features expose a public API via `features/*/index.ts` so other modules depend o
 
 ## Testing
 
-Tests cover pure logic, Redux slices/selectors, components, routing, and checkout flow. CI runs lint, tests, and build on every push.
+Tests cover pure logic, Redux slices/selectors, RTK Query endpoints, components, routing, and checkout flow. Coverage is enforced at **90%** minimum for statements, branches, functions, and lines via `npm run test:coverage`. CI runs lint, coverage tests, and build on every push.

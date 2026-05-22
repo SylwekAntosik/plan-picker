@@ -70,4 +70,28 @@ describe('CartSummary', () => {
 
     expect(onCheckout).toHaveBeenCalledOnce()
   })
+
+  it('shows checkout error and loading states', () => {
+    render(
+      <CartSummary
+        items={[
+          {
+            product,
+            quantity: 1,
+            lineTotal: 40,
+          },
+        ]}
+        total={40}
+        onCheckout={() => undefined}
+        checkoutError="Checkout unavailable"
+        isCheckoutLoading
+        isCheckoutDisabled
+      />,
+    )
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Checkout unavailable')
+    expect(
+      screen.getByRole('button', { name: 'Processing...' }),
+    ).toBeDisabled()
+  })
 })

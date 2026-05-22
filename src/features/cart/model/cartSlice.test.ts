@@ -5,6 +5,7 @@ import * as productsService from '@/shared/api/products'
 import {
   decrementQuantity,
   incrementQuantity,
+  resetCart,
   syncProducts,
 } from '@/features/cart/model/cartSlice'
 import {
@@ -59,5 +60,15 @@ describe('cart slice and selectors', () => {
     store.dispatch(decrementQuantity('pro'))
 
     expect(store.getState().cart.quantities.pro ?? 0).toBe(0)
+  })
+
+  it('resets cart quantities', () => {
+    const store = setupStore()
+
+    store.dispatch(syncProducts([product]))
+    store.dispatch(incrementQuantity('pro'))
+    store.dispatch(resetCart())
+
+    expect(store.getState().cart.quantities).toEqual({})
   })
 })

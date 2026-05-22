@@ -1,6 +1,8 @@
-import { screen, waitFor } from '@testing-library/react'
+import { cleanup, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
+import App from '@/App'
+import { AppProviders } from '@/app/providers/AppProviders'
 import * as checkoutApi from '@/shared/api/checkout'
 import * as productsApi from '@/shared/api/products'
 import { MOCK_PRODUCTS } from '@/shared/api/products'
@@ -19,6 +21,28 @@ describe('App routing', () => {
     await waitFor(() => {
       expect(screen.getByText('Choose your plans')).toBeInTheDocument()
     })
+  })
+
+  it('renders the default App entrypoint', async () => {
+    vi.spyOn(productsApi, 'fetchProducts').mockResolvedValue(MOCK_PRODUCTS)
+
+    render(<App />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Choose your plans')).toBeInTheDocument()
+    })
+  })
+
+  it('renders the app shell from AppProviders', async () => {
+    vi.spyOn(productsApi, 'fetchProducts').mockResolvedValue(MOCK_PRODUCTS)
+
+    render(<AppProviders />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Choose your plans')).toBeInTheDocument()
+    })
+
+    cleanup()
   })
 
   it('navigates to checkout after submitting selected plans', async () => {

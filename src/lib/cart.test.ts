@@ -4,6 +4,7 @@ import {
   calculateTotal,
   cartReducer,
   clampQuantity,
+  type CartAction,
 } from '@/lib/cart'
 import type { Product } from '@/types/product'
 
@@ -37,6 +38,12 @@ describe('clampQuantity', () => {
 })
 
 describe('buildSummaryItems', () => {
+  it('treats missing quantities as zero', () => {
+    const items = buildSummaryItems(products, {})
+
+    expect(items).toHaveLength(0)
+  })
+
   it('includes only products with quantity greater than zero', () => {
     const items = buildSummaryItems(products, {
       standard: 0,
@@ -108,5 +115,25 @@ describe('cartReducer', () => {
     state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
     state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
     expect(state.pro).toBe(0)
+  })
+
+  it('handles quantity changes for products not yet synced', () => {
+    let state = cartReducer({}, { type: 'INCREMENT', productId: 'pro' })
+    expect(state.pro).toBe(1)
+
+    state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
+    expect(state.pro).toBe(0)
+  })
+
+  it('does not decrement below zero for unknown products', () => {
+    const state = cartReducer({}, { type: 'DECREMENT', productId: 'pro' })
+
+    expect(state.pro).toBe(0)
+  })
+
+  it('throws for unsupported actions', () => {
+    expect(() =>
+      cartReducer({}, { type: 'UNKNOWN' } as CartAction),
+    ).toThrow('Unhandled cart action')
   })
 })
