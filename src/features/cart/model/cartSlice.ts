@@ -1,4 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { catalogApi } from '@/features/catalog/api/catalogApi'
 import { cartReducer as applyCartAction } from '@/lib/cart'
 import type { CartQuantities, Product, ProductId } from '@/types/product'
 
@@ -35,6 +36,17 @@ export const cartSlice = createSlice({
     resetCart(state) {
       state.quantities = initialState.quantities
     },
+  },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      catalogApi.endpoints.getProducts.matchFulfilled,
+      (state, action) => {
+        state.quantities = applyCartAction(state.quantities, {
+          type: 'SYNC_PRODUCTS',
+          products: action.payload,
+        })
+      },
+    )
   },
 })
 

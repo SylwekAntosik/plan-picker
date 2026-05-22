@@ -25,12 +25,11 @@ describe('cart slice and selectors', () => {
     vi.restoreAllMocks()
   })
 
-  it('syncs product quantities and updates totals', async () => {
+  it('syncs product quantities when catalog products load', async () => {
     vi.spyOn(productsService, 'fetchProducts').mockResolvedValue([product])
 
     const store = setupStore()
     await store.dispatch(catalogApi.endpoints.getProducts.initiate())
-    store.dispatch(syncProducts([product]))
     store.dispatch(incrementQuantity('pro'))
     store.dispatch(incrementQuantity('pro'))
 
@@ -39,6 +38,18 @@ describe('cart slice and selectors', () => {
     expect(selectSummaryItems(state)).toHaveLength(1)
     expect(selectCartTotal(state)).toBe(80)
     expect(selectHasSelectedPlans(state)).toBe(true)
+  })
+
+  it('preserves selected quantities when products reload', async () => {
+    vi.spyOn(productsService, 'fetchProducts').mockResolvedValue([product])
+
+    const store = setupStore()
+    await store.dispatch(catalogApi.endpoints.getProducts.initiate())
+    store.dispatch(incrementQuantity('pro'))
+
+    await store.dispatch(catalogApi.endpoints.getProducts.initiate())
+
+    expect(store.getState().cart.quantities.pro).toBe(1)
   })
 
   it('does not decrement below zero', () => {

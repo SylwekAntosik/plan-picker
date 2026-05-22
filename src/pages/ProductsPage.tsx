@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { CartSummary } from '@/components/CartSummary/CartSummary'
@@ -14,7 +13,6 @@ import {
   selectProductsError,
   selectProductsLoading,
   selectSummaryItems,
-  syncProducts,
 } from '@/features/cart'
 import { useGetProductsQuery } from '@/features/catalog'
 import { useSubmitOrderMutation } from '@/features/checkout'
@@ -35,12 +33,6 @@ export function ProductsPage() {
 
   const [submitOrder, { isLoading: isCheckoutLoading, error: submitError }] =
     useSubmitOrderMutation()
-
-  useEffect(() => {
-    if (products.length > 0) {
-      dispatch(syncProducts(products))
-    }
-  }, [dispatch, products])
 
   const handleCheckout = async () => {
     try {
