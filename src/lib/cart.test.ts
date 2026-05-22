@@ -1,0 +1,93 @@
+import { describe, expect, it } from 'vitest'
+import {
+  buildSummaryItems,
+  calculateTotal,
+  cartReducer,
+  clampQuantity,
+} from '@/lib/cart'
+import type { Product } from '@/types/product'
+
+const products: Product[] = [
+  {
+    id: 'standard',
+    name: 'Standard',
+    description: 'Basic',
+    priceMonthly: 20,
+  },
+  {
+    id: 'pro',
+    name: 'Pro',
+    description: 'Pro plan',
+    priceMonthly: 40,
+  },
+  {
+    id: 'pro-plus',
+    name: 'Pro+',
+    description: 'Pro plus',
+    priceMonthly: 60,
+  },
+]
+
+describe('clampQuantity', () => {
+  it('does not go below zero', () => {
+    expect(clampQuantity(-1)).toBe(0)
+    expect(clampQuantity(0)).toBe(0)
+    expect(clampQuantity(3)).toBe(3)
+  })
+})
+
+describe('buildSummaryItems', () => {
+  it('includes only products with quantity greater than zero', () => {
+    const items = buildSummaryItems(products, {
+      standard: 0,
+      pro: 2,
+      'pro-plus': 1,
+    })
+
+    expect(items).toHaveLength(2)
+    expect(items[0]).toMatchObject({
+      product: products[1],
+      quantity: 2,
+      lineTotal: 80,
+    })
+    expect(items[1]).toMatchObject({
+      product: products[2],
+      quantity: 1,
+      lineTotal: 60,
+    })
+  })
+})
+
+describe('calculateTotal', () => {
+  it('sums line totals', () => {
+    const total = calculateTotal([
+      {
+        product: products[1],
+        quantity: 2,
+        lineTotal: 80,
+      },
+      {
+        product: products[2],
+        quantity: 1,
+        lineTotal: 60,
+      },
+    ])
+
+    expect(total).toBe(140)
+  })
+})
+
+describe('cartReducer', () => {
+  it('increments and decrements quantities without going below zero', () => {
+    let state = cartReducer({}, { type: 'SYNC_PRODUCTS', products })
+
+    state = cartReducer(state, { type: 'INCREMENT', productId: 'pro' })
+    state = cartReducer(state, { type: 'INCREMENT', productId: 'pro' })
+    expect(state.pro).toBe(2)
+
+    state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
+    state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
+    state = cartReducer(state, { type: 'DECREMENT', productId: 'pro' })
+    expect(state.pro).toBe(0)
+  })
+})
