@@ -70,6 +70,8 @@ Each module keeps tests in a co-located `__tests__/` folder. Feature-specific UI
 
 Features expose a public API via `features/*/index.ts` so other modules depend on stable boundaries, not internal files.
 
+Page components keep Redux wiring in a co-located hook named `use{ComponentName}` (for example `useProductsPage.ts` next to `ProductsPage.tsx`). The component stays presentational; the hook owns selectors, mutations, and dispatch.
+
 ## Scripts
 
 | Command | Description |

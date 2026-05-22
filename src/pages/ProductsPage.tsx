@@ -1,56 +1,25 @@
-import { useNavigate } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '@/app/store/hooks'
 import { PageLayout } from '@/components/layout/PageLayout'
-import {
-  CartSummary,
-  decrementQuantity,
-  incrementQuantity,
-  selectCartTotal,
-  selectHasSelectedPlans,
-  selectProducts,
-  selectProductsError,
-  selectProductsLoading,
-  selectSummaryItems,
-} from '@/features/cart'
-import {
-  ProductList,
-  useGetProductsQuery,
-} from '@/features/catalog'
-import {
-  CheckoutStepper,
-  useSubmitOrderMutation,
-} from '@/features/checkout'
-import { getErrorMessage } from '@/lib/getErrorMessage'
+import { CartSummary } from '@/features/cart'
+import { ProductList } from '@/features/catalog'
+import { CheckoutStepper } from '@/features/checkout'
+import { useProductsPage } from '@/pages/useProductsPage'
 
 export function ProductsPage() {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
-  const { isError } = useGetProductsQuery()
-
-  const products = useAppSelector(selectProducts)
-  const quantities = useAppSelector((state) => state.cart.quantities)
-  const isLoading = useAppSelector(selectProductsLoading)
-  const productsError = useAppSelector(selectProductsError)
-  const summaryItems = useAppSelector(selectSummaryItems)
-  const total = useAppSelector(selectCartTotal)
-  const hasSelectedPlans = useAppSelector(selectHasSelectedPlans)
-
-  const [submitOrder, { isLoading: isCheckoutLoading, error: submitError }] =
-    useSubmitOrderMutation()
-
-  const handleCheckout = async () => {
-    try {
-      const checkoutData = await submitOrder(summaryItems).unwrap()
-      navigate(checkoutData.session.redirectPath)
-    } catch {
-      // Mutation error is exposed via submitError.
-    }
-  }
-
-  const checkoutErrorMessage = getErrorMessage(
-    submitError,
-    'Checkout failed. Try again.',
-  )
+  const {
+    products,
+    quantities,
+    isLoading,
+    isError,
+    productsError,
+    summaryItems,
+    total,
+    hasSelectedPlans,
+    isCheckoutLoading,
+    checkoutErrorMessage,
+    increment,
+    decrement,
+    checkout,
+  } = useProductsPage()
 
   return (
     <PageLayout
@@ -64,8 +33,8 @@ export function ProductsPage() {
           isLoading={isLoading}
           isError={isError}
           error={productsError}
-          onIncrement={(productId) => dispatch(incrementQuantity(productId))}
-          onDecrement={(productId) => dispatch(decrementQuantity(productId))}
+          onIncrement={increment}
+          onDecrement={decrement}
         />
       }
       summary={
@@ -73,7 +42,7 @@ export function ProductsPage() {
           items={summaryItems}
           total={total}
           isLoading={isLoading}
-          onCheckout={handleCheckout}
+          onCheckout={checkout}
           isCheckoutDisabled={!hasSelectedPlans}
           isCheckoutLoading={isCheckoutLoading}
           checkoutError={checkoutErrorMessage}
